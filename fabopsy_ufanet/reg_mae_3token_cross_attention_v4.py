@@ -330,17 +330,17 @@ class MaskedAutoencoderViT(nn.Module):
         au_multi_scale_exp_tokens = []
 
         # 加入Patch embedding
-        # patch_fea = x.detach().clone()
+        # patch_fea = x
         # cls_multi_scale_features.append(patch_fea)
         # apply Transformer blocks and extract multiscale feature
         for i, blk in enumerate(self.blocks):
             x = blk(x, x[:,3:,:], x[:,3:,:])
-            au_multi_scale_exp_tokens.append(x[:, 2, :].detach().clone().unsqueeze(1))
+            au_multi_scale_exp_tokens.append(x[:, 2, :].unsqueeze(1))
 
             if i in cls_extract_layers:
-                cls_multi_scale_features.append(x.detach().clone())
+                cls_multi_scale_features.append(x)
             if i in au_extract_layers:
-                au_multi_scale_patchs.append(x[:, 3:, :].detach().clone())
+                au_multi_scale_patchs.append(x[:, 3:, :])
         # ------------提取情绪头特征---------------
         # x = self.norm(x)
         # exp_fea = self.exp_head(x[:,2])
